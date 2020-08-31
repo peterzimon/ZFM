@@ -80,7 +80,7 @@ void updateCarrierFreq(byte note) {
   aCarrierVCO.setFreq(carrierFreq);
 }
 
-int notesPlaying;
+unsigned int notesPlaying;
 
 void HandleNoteOn(byte channel, byte note, byte velocity) {
   updateCarrierFreq(note);
@@ -96,6 +96,7 @@ void HandleNoteOff(byte channel, byte note, byte velocity) {
     envelopeVCO.noteOff();
     envelopeWN.noteOff();
     digitalWrite(MIDI_LED,LOW);
+    notesPlaying = 0;
   }
 }
 
