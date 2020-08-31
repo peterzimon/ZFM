@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <MozziGuts.h>
-#include <Oscil.h> // oscillator
+#include <Oscil.h>
 
 // Oscillator tables
 #include <tables/sin1024_int8.h>
@@ -14,7 +14,7 @@
 
 #define CONTROL_RATE 64
 
-// desired carrier frequency max and min, for AutoMap
+// Desired carrier frequency max and min, for AutoMap -- TEMPORARY
 const int MIN_CARRIER_FREQ = 22;
 const int MAX_CARRIER_FREQ = 880;
 
@@ -29,11 +29,11 @@ const int MAX_MOD_SPEED = 5000;
 // whitenoise
 const int MAX_NOISE_INTENSITY = 32;
 
-AutoMap kMapCarrierFreq(0,1023,MIN_CARRIER_FREQ,MAX_CARRIER_FREQ);
+AutoMap kMapCarrierFreq(0,1023,MIN_CARRIER_FREQ,MAX_CARRIER_FREQ); // TEMPORARY
 AutoMap kMapIntensity(0,1023,MIN_INTENSITY,MAX_INTENSITY);
 AutoMap kMapModSpeed(0,1023,MIN_MOD_SPEED,MAX_MOD_SPEED);
 
-const int CAR_FREQ_PIN = A5; // Temporary for testing without MIDI controller
+const int CAR_FREQ_PIN = A5; // TEMPORARY for testing without MIDI controller
 
 const int MOD_WAVEFORM_PIN = A0;
 const int MOD_FREQ_PIN = A1;
@@ -58,23 +58,8 @@ byte carrierWavePosition, modWavePosition, whiteNoiseVolume;
 void setup(){
   // Serial.begin(9600);
   startMozzi(CONTROL_RATE);
-  aWhiteNoise.setFreq(440);
+  aWhiteNoise.setFreq(440); // White noise can be fixed frequency
 }
-
-// Map a single knob to a range
-// - knobValue: value of the waveform knob pre-mapped to 0 - 255 range
-// - center: center value of the waveform
-// - range: the range in the 255 for a single waveform. E.g. if there are 4 waveforms
-//   then it's 85 (255/3). Waveform 1: 0 - 85, waveform 2: 0 - 85 - 170, waveform 3: 85 - 170 - 255, waveform 4: 170 - 255
-// int mapWaveVolume(int knobValue, int center, int range) {
-//   int distance = abs(center - knobValue);
-
-//   if (distance >= range) {
-//     distance = range;
-//   }
-//   int ret = (int)((range - distance) * 255 / range);
-//   return ret;
-// }
 
 void chooseCarrierTable(int waveNumber) {
   switch (waveNumber)
@@ -166,7 +151,6 @@ void updateControl() {
   
   /* WHITENOISE
   /* ---------------------------------------------------------------- */
-
   // Read noise level pot
   int whiteNoiseLevel = mozziAnalogRead(NOISE_LEVEL_PIN);
   whiteNoiseVolume = map(whiteNoiseLevel, 0, 1023, 0, MAX_NOISE_INTENSITY);
@@ -174,6 +158,8 @@ void updateControl() {
 
 int updateAudio(){
   long modulation = aSmoothIntensity.next(fmIntensity) * aModVCO.next();
+
+  // All of the signals have to be multiplied by their volume, then shift by 8 bit (256)
   return ((aCarrierVCO.phMod(modulation) * 255) + (aWhiteNoise.next() * whiteNoiseVolume))>>8;
 }
 
