@@ -23,4 +23,4 @@ Note that I used [Platformio](https://platformio.org) for the development of thi
 
 ### More info
 
-Check out this post [this post](https://www.peterzimon.com) for more info and how to build an actualy synth using this code.
+Check out [this post](https://www.peterzimon.com) for more info and how to build an actualy synth using this code.
