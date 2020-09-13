@@ -4,6 +4,8 @@
 
 Arduino based FM Synth using the Mozzi library
 
+Note that I used [https://platformio.org](Platformio) for the development of this sketch but you can upload it using the standard Arduino development environment as well. Just create a new sketch, copy the contents of [https://github.com/peterzimon/ZFM/blob/master/src/main.cpp](this file) to it and you should be good to go.
+
 ### How does it sound?
 
 [VIDEO]
