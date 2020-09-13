@@ -1,6 +1,15 @@
 /*
-FM synth
+ZFM - Arduino based FM synth using Mozzi library - Peter Zimon
 -----------------------------------------------------------------------
+
+Features:
+- single carrier, single modulator signal with waveform selection
+- modulation speed and intensity control
+- noise source
+- notes reading either by MIDI input or knob + button (continuous frequency)
+
+More info here:
+https://www.peterzimon.com
 
 FM Synthesis sample code: 
 https://github.com/sensorium/Mozzi/blob/master/examples/03.Sensors/Knob_LightLevel_x2_FMsynth/Knob_LightLevel_x2_FMsynth.ino
@@ -62,6 +71,8 @@ const int MAX_NOISE_INTENSITY = 64;
 
 
 // Knobs
+// Using Mozzi's Automap function to map the analog knob values to the 
+// min and max values of each control.
 // --------------------------------------------------------------------
 AutoMap kMapCarrierFreq(0,1023,MIN_CARRIER_FREQ,MAX_CARRIER_FREQ); // TEMPORARY
 AutoMap kMapIntensity(0,1023,MIN_INTENSITY,MAX_INTENSITY);
@@ -125,6 +136,7 @@ void HandleNoteOff(byte channel, byte note, byte velocity) {
   }
 }
 
+// The waveshape knob's value is mapped to 1-4 as there are 4 wavetables to map
 void chooseCarrierTable(int waveNumber) {
   switch (waveNumber)
   {
@@ -178,7 +190,9 @@ void updateControl() {
   envelopeWN.update();
   
   // CARRIER
-  // When coarse button is pushed the frequency of the carrier is set by the frequency knob
+  // When coarse button is pushed the frequency of the carrier is set by 
+  // the frequency knob. Otherwise the frequency is set based on the incoming
+  // MIDI note.
   coarseButtonValue = digitalRead(COARSE_BUTTON);
   if (coarseButtonValue == LOW) {  // Button pushed
     coarseButtonPushed = true;
