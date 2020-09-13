@@ -1,8 +1,8 @@
-# ZFM - Arduino based FM synth using Mozzi library
+# ZFM - Arduino based FM synth using the Mozzi library
 
 ### What's this?
 
-Arduino based FM Synth using the Mozzi library
+It's an Arduino based FM Synth using the Mozzi library
 
 Note that I used [Platformio](https://platformio.org) for the development of this sketch but you can upload it using the standard Arduino development environment as well. To do so:
 
